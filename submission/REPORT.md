@@ -1,6 +1,6 @@
 # Báo cáo cá nhân — K4-L3B Day 13 Monitoring & LLMOps
 
-> Mỗi học viên hoàn thiện một file duy nhất này. Khi dẫn evidence, dùng đường dẫn tương đối, ví dụ `evidence/07-trace-waterfall.png`.
+> Mỗi học viên hoàn thiện một file duy nhất này. Chỉ cần 3 output text và 5 ảnh runtime; dùng đường dẫn tương đối, ví dụ `evidence/03-incident-trace.png`.
 
 ## 1. Thông tin học viên
 
@@ -14,6 +14,7 @@
 
 ## 2. Evidence index
 
+<<<<<<< HEAD
 | Evidence | Đường dẫn |
 |---|---|
 | Pytest cuối | `evidence/01-pytest.png`, `evidence/01-pytest.txt` |
@@ -30,6 +31,20 @@
 | Incident metric / log / trace | `evidence/12-incident-metric.png`, `evidence/13-incident-log.png`, `evidence/14-incident-trace.png` (CP3 — chưa thực hiện, xem §7) |
 
 Artifact kiểm tra trực tiếp trên repo (không cần ảnh): `config/slo.yaml`, `config/alert_rules.yaml`, `docs/alerts.md`, `config/dashboard.yaml`, `dashboards/log_metrics.py`, `dashboards/dashboard.py`, `dashboards/README.md`, `requirements-dashboard.txt`, `tests/test_dashboard_metrics.py`.
+=======
+Giữ đúng ba output text và năm ảnh dưới đây. Không tách thêm ảnh; nếu cần giải thích, ghi bằng chữ trong các mục sau.
+
+| Evidence | Đường dẫn |
+|---|---|
+| Pytest cuối | `evidence/pytest.txt` |
+| Log validator | `evidence/log-validator.txt` |
+| Dashboard validator | `evidence/dashboard-validator.txt` |
+| Structured log + incident log | `evidence/01-incident-log.png` |
+| Trace list | `evidence/02-trace-list.png` |
+| Trace waterfall + metadata + incident trace | `evidence/03-incident-trace.png` |
+| Prompt versions + promote/rollback | `evidence/04-prompt-versioning.png` |
+| Dashboard + incident metric | `evidence/05-dashboard-incident.png` |
+>>>>>>> 0a4248606b574840360566dadbab5541cac09c0d
 
 ## 3. Kết quả kỹ thuật
 
@@ -89,10 +104,20 @@ Artifact kiểm tra trực tiếp trên repo (không cần ảnh): `config/slo.y
 
 ## 9. Checklist trước khi nộp
 
+<<<<<<< HEAD
 - [x] Kết quả và evidence thuộc commit SHA cuối (`49e7e39`) và mọi mệnh lệnh đều chạy lại được theo `README.md`.
 - [x] Tất cả ảnh/output mở được bằng đường dẫn tương đối trong mục 2.
 - [ ] Incident evidence nối đúng metric - log - trace (chờ challenge CP3 của lớp).
 - [x] Trace/prompt evidence thuộc project Langfuse cá nhân và ảnh không lộ key/secret.
 - [x] Repository chạy lại được theo README, `requirements-dashboard.txt` bổ sung cho dashboard Streamlit.
 - [x] Không có secret, API key, PII thô hoặc evidence của người khác/lớp khác; `data/logs.jsonl`, `.env`, `config/challenge.json` nằm trong `.gitignore`.
+=======
+- [ ] Kết quả và evidence thuộc commit SHA cuối.
+- [ ] Tất cả ảnh/output mở được bằng đường dẫn tương đối.
+- [ ] Có đúng 3 file text và 5 ảnh runtime theo hướng dẫn.
+- [ ] Incident evidence nối đúng metric → log → trace.
+- [ ] Trace/prompt evidence thuộc project Langfuse cá nhân và ảnh không lộ key/secret.
+- [ ] Repository chạy lại được theo README.
+- [ ] Không có secret, API key, PII thô hoặc evidence của người khác/lớp khác.
+>>>>>>> 0a4248606b574840360566dadbab5541cac09c0d
 - [ ] URL repo và commit SHA cuối đã được nộp trên LMS/Codelabs.
