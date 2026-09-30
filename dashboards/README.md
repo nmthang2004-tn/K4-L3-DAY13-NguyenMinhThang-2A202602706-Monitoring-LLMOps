@@ -49,3 +49,21 @@ cảnh báo để ảnh evidence không bị trắng.
 .\.venv\Scripts\python.exe -m pytest -q                                   # tests/test_dashboard_metrics.py
 .\.venv\Scripts\python.exe scripts\validate_dashboard.py                 # HỢP LỆ: 6/6 panel
 ```
+
+## Layout ?? ch?p ?? 6 panel trong 1 ?nh
+
+Dashboard x?p 6 panel th?nh l??i 2 c?t x 3 h?ng, m?i panel g?p header 1 d?ng
+(t?n panel ? ??n v? ? SLO ? tr?ng th?i ?/?) v? chart cao 140 px:
+
+```text
+latency | traffic
+errors  | cost
+tokens  | quality
+```
+
+C?ch ch?p `submission/evidence/11-dashboard-overview.png`:
+
+1. Thu g?n sidebar b?ng n?t m?i t?n tr?i (kho?ng th?i gian v?n hi?n ? d?ng caption tr?n ??u trang).
+2. B?m `F11` cho to?n m?n h?nh, th?m `Ctrl + -` m?t hai l?n n?u v?n ch?a ?? ch?.
+3. Ch?p b?ng `Win + Shift + S`, ho?c d?ng Chrome/Edge: `Ctrl + Shift + P` r?i ch?n
+   `Capture full size screenshot` ?? l?y tr?n trang (?? 6 panel) th?nh m?t file PNG.
