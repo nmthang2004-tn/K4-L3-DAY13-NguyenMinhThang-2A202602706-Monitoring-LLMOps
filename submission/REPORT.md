@@ -68,9 +68,14 @@ Artifact kiểm tra trực tiếp trên repo (không cần ảnh): `config/slo.y
 
 ## 7. Điều tra challenge
 
-- **Challenge ID:** chưa có. Trong buổi lab, Lab Coach chưa gửi file `config/challenge.json` cho lớp K4-L3B nên tôi chưa chạy `python scripts/inject_incident.py` với challenge chính thức và chưa tạo evidence `12`-`14`.
-- **Những gì đã có để điều tra:** `/health` trả `incidents: {rag_slow: false, tool_fail: false, cost_spike: false}` và `scripts/inject_incident.py --scenario <practice_scenario>` là đường luyện tập được docs cho phép.
-- **Khi có challenge, các bước sẽ thực hiện:** (1) xem dashboard để xác định metric xấu và khoảng thời gian; (2) lọc `data/logs.jsonl` trong khoảng đó để lấy `correlation_id` của request bất thường; (3) mở trace có cùng `correlation_id` và so sánh latency/trạng thái của `retrieval` và `generation`; (4) kết luận root cause, fix action, preventive measure. Mọi kết luận sẽ phải nối được metric - log - trace bằng đúng một `correlation_id`.
+- **Challenge ID:** `day13-k4-l3b-monitoring-llmops-v1`; incident được Lab Coach cung cấp là `rag_slow`.
+- **Khoảng thời gian điều tra:** `2026-09-30T07:20:16Z` đến `2026-09-30T07:20:27Z` (UTC), sau khi workload challenge được chạy với concurrency 5.
+- **Triệu chứng từ metrics:** P95 server latency là **2656ms**, vượt ngưỡng challenge **2000ms**; năm request `monitoring` có latency 2654–2656ms. TTFT P95 vẫn 50ms và error rate là 0%, nên vấn đề nằm trước lúc generation bắt đầu chứ không phải lỗi response.
+- **Log line và correlation ID liên quan:** `response_sent` lúc `2026-09-30T07:20:16.129212Z`, `correlation_id=req-f049d2b0`, `feature=monitoring`, `latency_ms=2656`, `ttft_ms=50`, `tool_name=retrieval`, `tool_success=true`.
+- **Trace ID và span gây ảnh hưởng:** Mở Langfuse, lọc trace metadata `correlation_id=req-f049d2b0`, rồi chụp trace ID và waterfall vào `evidence/14-incident-trace.png`. Span cần xác nhận là `retrieval`; hiện truy vấn API Langfuse bị lỗi DNS tạm thời nên không ghi bịa trace ID.
+- **Root cause:** Incident `rag_slow` chủ động thêm khoảng 2.5 giây vào bước retrieval. Dữ liệu log cho thấy retrieval vẫn success nhưng toàn bộ request challenge chậm khoảng 2654ms, phù hợp với symptom latency và loại trừ TTFT/generation.
+- **Fix action:** Tắt `rag_slow`, xác nhận `/health` trả mọi incident `false`, rồi chạy lại một workload nhỏ để xác nhận latency hồi phục.
+- **Preventive measure:** Giữ alert `HighLatencyP95`, dùng correlation ID để mở waterfall retrieval, và rollback prompt/configuration hoặc tắt scenario theo runbook khi latency vượt ngưỡng.
 
 ## 8. Giải thích và tự đánh giá
 
