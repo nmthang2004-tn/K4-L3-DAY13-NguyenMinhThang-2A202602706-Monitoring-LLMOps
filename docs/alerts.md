@@ -22,6 +22,11 @@ Ví dụ dưới đây minh họa mức độ cụ thể cần có. Học viên 
 
 ## Alert 1
 
+- Name: `HighLatencyP95`; warning for 5m, Slack `#k4-l3b-alerts`.
+- Trigger/impact: P95 request latency exceeds 3000ms; users wait too long for an answer.
+- Checks: confirm P95/P99; locate a slow `correlation_id` in logs; compare its retrieval/generation observations in Langfuse.
+- Mitigation and owner: rollback a regressed prompt, disable a practice incident or reduce load; owner: student.
+
 - Tên:
 - Severity:
 - Duration:
@@ -35,6 +40,11 @@ Ví dụ dưới đây minh họa mức độ cụ thể cần có. Học viên 
 
 ## Alert 2
 
+- Name: `ElevatedErrorRate`; critical for 5m, Slack `#k4-l3b-alerts`.
+- Trigger/impact: request failure rate exceeds 2%; users receive failed responses.
+- Checks: confirm traffic/error rate; group `request_failed` by `error_type`; inspect the matching trace.
+- Mitigation and owner: disable incident, restore dependency/configuration, retest a small workload; owner: student.
+
 - Tên:
 - Severity:
 - Duration:
@@ -47,6 +57,11 @@ Ví dụ dưới đây minh họa mức độ cụ thể cần có. Học viên 
 - Owner:
 
 ## Alert 3
+
+- Name: `RetrievalSuccessDegraded`; warning for 10m, Slack `#k4-l3b-alerts`.
+- Trigger/impact: retrieval success falls below 90%; answers can lack relevant context.
+- Checks: confirm retrieval success, filter `tool_success=false` logs, inspect retrieval observation.
+- Mitigation and owner: disable failing scenario, validate retrieval configuration, rerun a small workload; owner: student.
 
 - Tên:
 - Severity:

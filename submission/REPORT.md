@@ -37,20 +37,20 @@
 
 | Nội dung | Baseline | Kết quả cuối | Nhận xét |
 |---|---|---|---|
-| `validate_logs.py` | | | |
-| `validate_dashboard.py` | | | |
-| `pytest` | | | |
+| `validate_logs.py` | 30/100 | 100/100 | CP1: 23 records, 11 correlation IDs; không thiếu trường bắt buộc/enrichment và không có PII leak. |
+| `validate_dashboard.py` | 6/6 panels hợp lệ | | CP0 baseline đã đạt dashboard contract. |
+| `pytest` | 22 passed | 24 passed | CP1 bổ sung test scrub CCCD và thẻ. |
 | Số traces hợp lệ | | | |
-| Số PII leak | | | |
+| Số PII leak | | 0 | Validator CP1. |
 | Latency P95 / TTFT P95 | | | |
 | Retrieval success rate | | | |
 
 ## 4. Logging và PII
 
-- **Cách tạo/nhận và truyền correlation ID:**
-- **Các metadata được ghi vào structured log:**
-- **Cách bảo đảm PII được scrub trước khi ghi:**
-- **Cách kiểm chứng kết quả:**
+- **Cách tạo/nhận và truyền correlation ID:** Middleware xóa context cũ, nhận `x-request-id` hoặc sinh `req-<8-hex>`, bind vào structlog context và trả lại qua response header.
+- **Các metadata được ghi vào structured log:** `user_id_hash`, `session_id`, `feature`, `model`, `env` và `correlation_id` được bind trước `request_received`.
+- **Cách bảo đảm PII được scrub trước khi ghi:** `scrub_event` xử lý đệ quy mọi chuỗi trong event trước JSON renderer/file writer; email, điện thoại Việt Nam, CCCD và thẻ được thay bằng marker `[REDACTED_*]`.
+- **Cách kiểm chứng kết quả:** Chuyển log CP0 ra ngoài repo, restart API, chạy load test; `validate_logs.py` đạt 100/100 và pytest đạt 24 passed.
 
 ## 5. Tracing và prompt versioning
 

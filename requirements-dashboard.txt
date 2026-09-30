@@ -1,0 +1,3 @@
+# Dashboard runtime cho evidence 11; giữ requirements.txt của lab nguyên vẹn.
+# .\.venv\Scripts\python.exe -m pip install -r requirements-dashboard.txt
+streamlit>=1.37

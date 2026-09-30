@@ -51,7 +51,7 @@ class LabAgent:
             },
         ):
             started = time.perf_counter()
-            docs = retrieve(message)
+            docs = self._retrieve_context(message)
             prompt = resolve_prompt(
                 langfuse_client,
                 feature=feature,
@@ -71,10 +71,8 @@ class LabAgent:
                 },
                 version=prompt.version,
             )
-            # TODO (CP2): instrument retrieve() and FakeLLM.generate() as child
-            # observations. The nested generation must receive prompt, usage and cost.
             with propagate_attributes(prompt=prompt.managed_prompt):
-                response = self.llm.generate(prompt.text)
+                response = self._generate_response(prompt)
             quality_score = self._heuristic_quality(message, response.text, docs)
             latency_ms = int((time.perf_counter() - started) * 1000)
             cost_usd = self._estimate_cost(response.usage.input_tokens, response.usage.output_tokens)
@@ -97,6 +95,38 @@ class LabAgent:
             cost_usd=cost_usd,
             quality_score=quality_score,
         )
+
+    @observe(name="retrieval", as_type="retriever", capture_input=False, capture_output=False)
+    def _retrieve_context(self, message: str) -> list[str]:
+        docs = retrieve(message)
+        get_langfuse_client().update_current_span(
+            input={"query_preview": summarize_text(message)},
+            output={"doc_count": len(docs)},
+            metadata={"doc_count": len(docs)},
+        )
+        return docs
+
+    @observe(name="generation", as_type="generation", capture_input=False, capture_output=False)
+    def _generate_response(self, prompt) -> object:
+        response = self.llm.generate(prompt.text)
+        cost_usd = self._estimate_cost(
+            response.usage.input_tokens, response.usage.output_tokens
+        )
+        update_generation = getattr(get_langfuse_client(), "update_current_generation", None)
+        if update_generation:
+            update_generation(
+                model=response.model,
+                input={"prompt_preview": summarize_text(prompt.text)},
+                output={"answer_preview": summarize_text(response.text)},
+                usage_details={
+                    "input_tokens": response.usage.input_tokens,
+                    "output_tokens": response.usage.output_tokens,
+                    "total_tokens": response.usage.input_tokens + response.usage.output_tokens,
+                },
+                cost_details={"total_cost": cost_usd},
+                prompt=prompt.managed_prompt,
+            )
+        return response
 
     def _estimate_cost(self, tokens_in: int, tokens_out: int) -> float:
         input_cost = (tokens_in / 1_000_000) * 3
