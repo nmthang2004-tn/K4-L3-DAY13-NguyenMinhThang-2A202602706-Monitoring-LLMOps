@@ -1,0 +1,7 @@
+# Evidence 10: Langfuse prompt label mapping (prompt day13-chat)
+# Nguon: GET /api/public/v2/prompts (khong in secret)
+
+{'name': 'day13-chat'} : [('day13-chat', None, ['baseline', 'candidate', 'latest', 'production'])]
+{'name': 'day13-chat', 'label': 'production'} : [('day13-chat', None, ['baseline', 'production'])]
+{'name': 'day13-chat', 'version': '1'} : [('day13-chat', None, ['baseline', 'production'])]
+{'name': 'day13-chat', 'version': '2'} : [('day13-chat', None, ['candidate', 'latest'])]

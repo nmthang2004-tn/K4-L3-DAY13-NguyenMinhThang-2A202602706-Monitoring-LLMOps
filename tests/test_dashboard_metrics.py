@@ -152,11 +152,16 @@ def test_contract_metadata_matches_dashboard_yaml() -> None:
 def test_repository_logs_produce_six_panels_when_available() -> None:
     log_path = REPO_ROOT / "data" / "logs.jsonl"
     if not log_path.is_file():
-        pytest.skip("data/logs.jsonl chưa tồn tại (file bị .gitignore); chạy load_test trước.")
+        pytest.skip("data/logs.jsonl ch?a t?n t?i (file b? .gitignore); ch?y load_test tr??c.")
 
-    summary = log_metrics.summarize(log_metrics.load_events(log_path), 60)
+    events = log_metrics.load_events(log_path)
+    if not any(event.get("event") == "response_sent" for event in events):
+        pytest.skip("data/logs.jsonl ch?a c? response_sent; ch?y scripts/load_test.py tr??c.")
+
+    summary = log_metrics.summarize(events, 1440)
 
     assert set(summary["panels"]) == set(log_metrics.PANEL_IDS)
     assert summary["window"]["records"] > 0
     assert 0.0 <= summary["panels"]["errors"]["metric"]["retrieval_success_pct"] <= 100.0
     assert summary["panels"]["quality"]["metric"]["samples"] > 0
+

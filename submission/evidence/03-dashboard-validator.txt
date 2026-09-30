@@ -1,0 +1,2 @@
+$ D:\DayVinAI\Day13\Lab13\K4-L3-DAY13-NguyenMinhThang-2A202602706-Monitoring-LLMOps\.venv\Scripts\python.exe scripts/validate_dashboard.py
+HỢP LỆ: 6/6 panel có trong dashboard contract.

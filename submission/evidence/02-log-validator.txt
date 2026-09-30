@@ -1,0 +1,15 @@
+$ D:\DayVinAI\Day13\Lab13\K4-L3-DAY13-NguyenMinhThang-2A202602706-Monitoring-LLMOps\.venv\Scripts\python.exe scripts/validate_logs.py
+--- Lab Verification Results ---
+Total log records analyzed: 123
+Records with missing required fields: 0
+Records with missing enrichment (context): 0
+Unique correlation IDs found: 54
+Potential PII leaks detected: 0
+
+--- Grading Scorecard (Estimates) ---
++ [PASSED] Basic JSON schema
++ [PASSED] Correlation ID propagation
++ [PASSED] Log enrichment
++ [PASSED] PII scrubbing
+
+Estimated Score: 100/100

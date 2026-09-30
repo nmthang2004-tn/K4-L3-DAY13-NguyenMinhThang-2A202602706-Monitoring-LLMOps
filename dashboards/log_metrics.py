@@ -377,9 +377,15 @@ def summarize(
 def _format(value: Any, digits: int = 2) -> str:
     if value is None:
         return "n/a"
+    if isinstance(value, bool):
+        return str(value)
+    if isinstance(value, int):
+        return f"{value:,}"
     if isinstance(value, float):
         return f"{value:,.{digits}f}"
-    return f"{value:,}"
+    if isinstance(value, (dict, list, tuple)):
+        return json.dumps(value, ensure_ascii=False, default=str)
+    return str(value)
 
 
 def render_text_report(summary: dict[str, Any]) -> str:

@@ -1,0 +1,44 @@
+# Evidence 04: structured log cho correlation_id req-a1b2c3d4
+
+$ python -c "import httpx; r = httpx.post('http://127.0.0.1:8000/chat', json={"user_id": "demo", "session_id": "demo-01", "feature": "qa", "message": "Explain traces"}, headers={'x-request-id':'req-a1b2c3d4'}); print(r.status_code, r.headers.get('x-request-id'), r.headers.get('x-response-time-ms'))"
+200 req-a1b2c3d4 2872
+
+$ python -c "import json,sys; [print(json.dumps(json.loads(l), ensure_ascii=False, indent=2)) for l in open('data/logs.jsonl', encoding='utf-8') if sys.argv[1] in l]" req-a1b2c3d4
+{
+  "service": "api",
+  "payload": {
+    "message_preview": "Explain traces"
+  },
+  "event": "request_received",
+  "model": "claude-sonnet-4-5",
+  "feature": "qa",
+  "session_id": "demo-01",
+  "correlation_id": "req-a1b2c3d4",
+  "user_id_hash": "2a97516c354b",
+  "env": "dev",
+  "level": "info",
+  "ts": "2026-09-30T05:21:30.439349Z"
+}
+{
+  "service": "api",
+  "latency_ms": 1625,
+  "ttft_ms": 50,
+  "tokens_in": 24,
+  "tokens_out": 133,
+  "cost_usd": 0.002067,
+  "quality_score": 0.8,
+  "tool_name": "retrieval",
+  "tool_success": true,
+  "payload": {
+    "answer_preview": "Starter answer. You should improve this output logic and add better quality chec..."
+  },
+  "event": "response_sent",
+  "model": "claude-sonnet-4-5",
+  "feature": "qa",
+  "session_id": "demo-01",
+  "correlation_id": "req-a1b2c3d4",
+  "user_id_hash": "2a97516c354b",
+  "env": "dev",
+  "level": "info",
+  "ts": "2026-09-30T05:21:33.306067Z"
+}
